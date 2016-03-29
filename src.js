@@ -4,9 +4,6 @@ function capFullName(full_name){
   var surName = "mc";
   var apo = "'";
   
-  console.log("--debug--");
-  console.log(new Date().getTime());
-  
   var new_arr = clean_name_arr.map(function(a){
     var tmp;
     var frontName;
