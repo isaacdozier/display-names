@@ -15,6 +15,8 @@ function capFullName(full_name, lang){
   
   var apo = ["'"];
   var default_language = "eng";
+  
+  //language patches in progress
   var surNames = [
     {lang:"eng",
      backCaps:["mc","mac","nic"],
