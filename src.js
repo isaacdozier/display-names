@@ -24,9 +24,12 @@ function arrayStartsValue(array, value){
 function capFullName(full_name){
   var clean_name_arr = full_name.toLowerCase().split(" ");
   var new_name;
+  
   var surNameM = ["mc","mac"];
   var surNameY = "y";
   var apo = "'";
+  var apoNoCap = "aeiouy";
+  
   var new_arr = clean_name_arr.map(function(a){
     
     var tmp;
@@ -45,12 +48,18 @@ function capFullName(full_name){
       tmp = tmp.replace(backName, oneWordUpper(backName));
       
     } else if(a.includes(apo)){
+      var before = a.search(apo)-1;
+      var after = a.search(apo)+1;
       
       frontName = a.slice(0, a.search(apo));
       backName = a.slice(a.search(apo)+1, a.length);
-      tmp = a.replace(frontName, oneWordUpper(frontName));
-      tmp = tmp.replace(backName, oneWordUpper(backName));
       
+      tmp = a.replace(frontName, oneWordUpper(frontName));
+      
+      if(a.charAt(before) !== a.charAt(after)){
+        tmp = tmp.replace(backName, oneWordUpper(backName));
+      }
+       
     } else if(a === surNameY){
       
       tmp = a;
