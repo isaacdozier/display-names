@@ -14,28 +14,56 @@ function capFullName(full_name, lang){
   var surLower;
   
   var apo = ["'"];
+  var default_language = "eng";
   var surNames = [
     {lang:"eng",
      backCaps:["mc","mac","nic"],
      lower:["y","von","van","de"]},
     
-    //example language object
-    {lang:"abc",
-     backCaps:["123","xyz"],
-     lower:["bob","sam"]}
+    {lang:"del",
+     backCaps:["mc","mac","nic"],
+     lower:["y","van","de"]},
   ];
   
+  var langIndex = function(){
+    var tmp;
+    for(var i = 0;i<surNames.length;i++){
+      if(default_language === surNames[i].lang){
+        tmp = surNames.indexOf(default_language);
+      } else {
+        //extra backup default language [eng/english]
+        tmp = 0;
+      }
+    } 
+    return tmp;
+  };
+  console.log(langIndex());
+  
   var sup = function(){
+    
     var tmp = false;
+    
     for(var i = 0;i < surNames.length;i++){
       if(surNames[i].lang === lang){
+        
         surBackCaps = surNames[i].backCaps;
         surLower = surNames[i].lower;
         tmp = true;
+        
+      } else if (!lang){
+        
+        surBackCaps = surNames[langIndex()].backCaps;
+        surLower = surNames[langIndex()].lower;
+        tmp = true;
+        
       }
     }  
+    
     return tmp;
+    
   };
+  
+  console.log(sup());
   
   var new_arr = clean_name_arr.map(function(a){
     
@@ -43,6 +71,10 @@ function capFullName(full_name, lang){
     var frontName;
     var middleName;
     var backName;
+    
+    var checkLang = function(){
+      
+    };
     
     if(arrayStartsValue(surBackCaps,a) && sup()){
       
