@@ -1,8 +1,89 @@
-//helper functions
-function isInArray(value, array) {
-  return array.indexOf(value) > -1;
+//
+//Copyright: 2016
+//Author: Isaac Dozier
+//Email: idoz.wow@gmail.com
+//
+
+
+//Builder function
+function capFullName(full_name, lang){
+  var clean_name_arr = full_name.trim().toLowerCase().split(" ");
+  
+  var new_name;
+  var surBackCaps;
+  var surLower;
+  
+  var apo = ["'"];
+  var surNames = [
+    {lang:"eng",
+     backCaps:["mc","mac","nic"],
+     lower:["y","von","van","de"]},
+    
+    //example language object
+    {lang:"abc",
+     backCaps:["123","xyz"],
+     lower:["bob","sam"]}
+  ];
+  
+  var sup = function(){
+    var tmp = false;
+    for(var i = 0;i < surNames.length;i++){
+      if(surNames[i].lang === lang){
+        surBackCaps = surNames[i].backCaps;
+        surLower = surNames[i].lower;
+        tmp = true;
+      }
+    }  
+    return tmp;
+  };
+  
+  var new_arr = clean_name_arr.map(function(a){
+    
+    var tmp;
+    var frontName;
+    var middleName;
+    var backName;
+    
+    if(arrayStartsValue(surBackCaps,a) && sup()){
+      
+      for(var i = 0;i < surBackCaps.length;i++){
+        if(a.startsWith(surBackCaps[i])){
+          backName = a.slice(surBackCaps[i].length, a.length);
+          tmp = a.replace(surBackCaps[i], oneWordUpper(surBackCaps[i]));
+        } 
+      }
+      
+      tmp = tmp.replace(backName, oneWordUpper(backName));
+      
+    } else if(arrayInValue(apo,a)){
+      
+      frontName = a.slice(0, a.search(apo));
+      backName = a.slice(a.search(apo)+1, a.length);
+      
+      tmp = a.replace(frontName, oneWordUpper(frontName));
+      
+      if(a.charAt(a.search(apo)-1) !== a.charAt(a.search(apo)+1)){
+        tmp = tmp.replace(backName, oneWordUpper(backName));
+      }
+       
+    } else if(arrayIsValue(surLower,a) && sup()){
+      
+      tmp = a;
+      
+    } else {
+      
+      tmp = oneWordUpper(a);
+      
+    }
+    return tmp;
+  }); 
+  
+  new_name = new_arr.join(" ");
+  
+  return new_name;
 }
 
+//helper functions
 function oneWordUpper(oneWord){
   var Caps;
   Caps = oneWord.charAt(0).toUpperCase();
@@ -20,59 +101,22 @@ function arrayStartsValue(array, value){
   return tmp;
 }
 
-//Builder function
-function capFullName(full_name){
-  var clean_name_arr = full_name.toLowerCase().split(" ");
-  var new_name;
-  
-  var surNameM = ["mc","mac"];
-  var surNameY = "y";
-  var apo = "'";
-  var apoNoCap = "aeiouy";
-  
-  var new_arr = clean_name_arr.map(function(a){
-    
-    var tmp;
-    var frontName;
-    var backName;
-    
-    if(arrayStartsValue(surNameM,a)){
-      
-      for(var i = 0;i < surNameM.length;i++){
-        if(a.startsWith(surNameM[i])){
-          backName = a.slice(surNameM[i].length, a.length);
-          tmp = a.replace(surNameM[i], oneWordUpper(surNameM[i]));
-        } 
-      }
-      
-      tmp = tmp.replace(backName, oneWordUpper(backName));
-      
-    } else if(a.includes(apo)){
-      var before = a.search(apo)-1;
-      var after = a.search(apo)+1;
-      
-      frontName = a.slice(0, a.search(apo));
-      backName = a.slice(a.search(apo)+1, a.length);
-      
-      tmp = a.replace(frontName, oneWordUpper(frontName));
-      
-      if(a.charAt(before) !== a.charAt(after)){
-        tmp = tmp.replace(backName, oneWordUpper(backName));
-      }
-       
-    } else if(a === surNameY){
-      
-      tmp = a;
-      
-    } else {
-      
-      tmp = oneWordUpper(a);
-      
+function arrayInValue(array, value){
+  var tmp = false;
+  for(var i=0; i < array.length;i++){
+    if(value.includes(array[i])){
+      tmp = true;
     }
-    return tmp;
-  }); 
-  
-  new_name = new_arr.join(" ");
-  
-  return new_name;
+  }
+  return tmp;
+}
+
+function arrayIsValue(array, value){
+  var tmp = false;
+  for(var i=0; i < array.length;i++){
+    if(value===array[i]){
+      tmp = true;
+    }
+  }
+  return tmp;
 }
