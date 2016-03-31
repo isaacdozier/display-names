@@ -98,7 +98,6 @@ function capFullName(full_name, lang){
     var second = clean_name_arr[clean_name_arr.indexOf(a)+1];
     var surLowerBefore = arrayIsValue(surNames[langIndex()].lowerBefore,first+" "+second);
     var surLowerBoth = arrayIsValue(surNames[langIndex()].lowerBoth,first+" "+second);
-      
     
     if(arrayStartsValue(surBackCaps,a) && setSurNames){
       //Mostly sorts compund names for:
@@ -154,7 +153,7 @@ function capFullName(full_name, lang){
       //leaves leading sur-names lowercase for:
       //french ie. 'de La'    
       tmp = first+" "+second;
-      new_name_arr = clean_name_arr.shift();
+      new_name_arr = clean_name_arr.splice(clean_name_arr.indexOf(first),2,tmp);
       //testing
       console.log("5: "+tmp);
       
