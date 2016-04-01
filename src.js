@@ -12,24 +12,18 @@ function capFullName(full_name, lang){
   
   var new_name_arr;
   var new_name;
-  
-  var apo;
-  var surBackCaps;
-  var surLower;
-  var surLowerBoth;
-  var surLowerBefore;
    
   var default_language = "eng";
   var surNames = [
     {lang:"eng",
-     apo:["'"],
+     apo:["'","-"],
      upperSur:["mc","mac","nic"],
      lower:["y","von"],
      lowerBoth:["van de","van der","van den","van het","van 't"],
      lowerBefore:["de la"]},
     
     {lang:"fre",
-     apo:["'"],
+     apo:["'","-"],
      upperSur:["mc","mac","nic"],
      lower:["y","von"],
      lowerBoth:["van de","van der","van den"],
@@ -39,33 +33,16 @@ function capFullName(full_name, lang){
   //call to check for language argument
   var langIndex = function(){ 
     var tmp;
-    
     for(var i=0;i<surNames.length;i++){
       if(surNames[i].lang === lang){
         tmp = i;
       }
     }
-    
     if(!tmp){
       //default language set to 0 for eng/english
       tmp = 0;
     }
-    
     return tmp;
-  };
-  
-  //set language surname rules
-  var langeSurNames = function(index){
-    if(index !== ''){
-      apo            = surNames[index].apo;
-      surBackCaps    = surNames[index].upperSur;
-      surLower       = surNames[index].lower;
-      surLowerBoth   = surNames[index].lowerBoth;
-      surLowerBefore = surNames[index].lowerBefore;
-      return true;
-    } else {
-      return false;
-    }
   };
   
   //match and join surname compund rules 
@@ -84,8 +61,6 @@ function capFullName(full_name, lang){
     return tmp;
   };
   
-  var setSurNames = langeSurNames(langIndex());
-  
   //final build name array
   new_name_arr = clean_name_arr.map(function(a){
     
@@ -94,54 +69,71 @@ function capFullName(full_name, lang){
     var middleName;
     var backName;
     
-    var first = clean_name_arr[clean_name_arr.indexOf(a)];
+    var first  = clean_name_arr[clean_name_arr.indexOf(a)];
     var second = clean_name_arr[clean_name_arr.indexOf(a)+1];
-    var surLowerBefore = arrayIsValue(surNames[langIndex()].lowerBefore,first+" "+second);
-    var surLowerBoth = arrayIsValue(surNames[langIndex()].lowerBoth,first+" "+second);
     
-    if(arrayStartsValue(surBackCaps,a) && setSurNames){
+    var surA       = surNames[langIndex()].apo;
+    var surU       = surNames[langIndex()].upperSur;
+    var surL       = surNames[langIndex()].lower;
+    var surLBefore = surNames[langIndex()].lowerBefore;
+    var surLBoth   = surNames[langIndex()].lowerBoth;
+    
+    var surApo         = arrayInValue(surA,a);
+    var surUpper       = arrayStartsValue(surU,a);
+    var surLower       = arrayIsValue(surL,a);
+    var surLowerBefore = arrayIsValue(surLBefore,first+" "+second);
+    var surLowerBoth   = arrayIsValue(surLBoth,first+" "+second);
+    
+     if(surApo){
+      //default for all languages currently [to be patched later]
+      //Splits compound names with apostrophe and hyphen
+      //French ie. D'Hosier
+      //Other  ie. Anderson-Johnson
+      
+      for(var ii = 0; ii < surA.length;ii++){
+      
+        if(a.includes(surA[ii])){
+          frontName = a.slice(0, a.search(surA[ii]));
+          backName = a.slice(a.search(surA[ii])+1, a.length);
+          //Cap frontName
+          tmp = a.replace(frontName, oneWordUpper(frontName));
+        
+          if(a.charAt(a.search(surA[ii])-1) !== a.charAt(a.search(surA[ii])+1)){
+            //BUT only capitalize if before/after chars !==
+            //ie. Ma'asara is left alone
+            //but D'Hosier is capitalized
+            tmp = tmp.replace(backName, oneWordUpper(backName));
+          }
+        }
+      }
+      
+      //testing
+      console.log("1: "+tmp);
+       
+    } else if(surUpper){
       //Mostly sorts compund names for:
       //Irish ie. McDonald,MacDonald
       //Dutch
       //English
-      for(var i = 0;i < surBackCaps.length;i++){
-        if(a.startsWith(surBackCaps[i])){
-          backName = a.slice(surBackCaps[i].length, a.length);
-          tmp = a.replace(surBackCaps[i], oneWordUpper(surBackCaps[i]));
+      
+      for(var i = 0;i < surU.length;i++){
+        if(a.startsWith(surU[i])){
+          backName = a.slice(surU[i].length, a.length);
+          tmp = a.replace(surU[i], oneWordUpper(surU[i]));
         } 
       }
       
       tmp = tmp.replace(backName, oneWordUpper(backName));
-      console.log("1: "+tmp);
-      
-    } else if(arrayInValue(apo,a) && setSurNames){
-      //default for all languages currently [to be patched later]
-      //Splits compound names with apostrophe [']
-      //French ie. D'Hosier
-      frontName = a.slice(0, a.search(apo));
-      backName = a.slice(a.search(apo)+1, a.length);
-      
-      //Cap frontName
-      tmp = a.replace(frontName, oneWordUpper(frontName));
-      
-      //Cap backName
-      if(a.charAt(a.search(apo)-1) !== a.charAt(a.search(apo)+1)){
-        //BUT only capitalize if before/after chars !==
-        //ie. Ma'asara is left alon
-        //but D'Hosier is capitalized
-        tmp = tmp.replace(backName, oneWordUpper(backName));
-      }
-      //testing
       console.log("2: "+tmp);
-       
-    } else if(arrayIsValue(surLower,a) && setSurNames){
+      
+    } else if(surLower){
       //leaves sur-names lowercase for:
       //Spanish ie. 'y'
       tmp = a;
       //testing
       console.log("3: "+tmp);
       
-    } else if(surLowerBefore && setSurNames){
+    } else if(surLowerBefore){
       //leaves leading sur-names lowercase for:
       //french ie. 'de La'    
       tmp = first+" "+oneWordUpper(second);
@@ -149,7 +141,7 @@ function capFullName(full_name, lang){
       //testing
       console.log("4: "+tmp);
       
-    } else if(surLowerBoth && setSurNames){
+    } else if(surLowerBoth){
       //leaves leading sur-names lowercase for:
       //french ie. 'de La'    
       tmp = first+" "+second;
