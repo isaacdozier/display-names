@@ -31,19 +31,21 @@ function capFullName(full_name, lang){
   var vowelsArr = vowels.split('');
    
   var default_language = "eng";
+  
+  //Surname - Language library
+  //**In Developement**
+  //**Will be allocated to it's own file in future patch
+  //   _____________________
+  //  |                     |
+  //  |  Language Patching  |
+  //  |_____________________|
+  //
   var surNames = [
     {lang:"eng",
      apo:["'","-"],
      upperSur:["mc","mac","nic"],
      lower:["y","von"],
      lowerBoth:["van de","van der","van den","van het","van 't"],
-     lowerBefore:["de la"]},
-    
-    {lang:"fre",
-     apo:["'","-"],
-     upperSur:["mc","mac","nic"],
-     lower:["y","von"],
-     lowerBoth:["van de","van der","van den"],
      lowerBefore:["de la"]}
   ];
   
