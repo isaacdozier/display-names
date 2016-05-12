@@ -136,9 +136,6 @@ function capFullName(full_name, lang){
           }
         }
       }
-      
-      //testing
-      console.log("1: "+tmp);
        
     } else if(surUpper){
       //Mostly sorts compund names for:
@@ -154,36 +151,27 @@ function capFullName(full_name, lang){
       }
       
       tmp = tmp.replace(backName, oneWordUpper(backName));
-      console.log("2: "+tmp);
       
     } else if(surLower){
       //leaves single letter sur-names lowercase
       //Spanish ie. 'y'
       tmp = a;
-      //testing
-      console.log("3: "+tmp);
       
     } else if(surLowerBefore){
       //leaves leading sur-names lowercase
       //french ie. 'de La'    
       tmp = first+" "+oneWordUpper(second);
       new_name_arr = clean_name_arr.shift();
-      //testing
-      console.log("4: "+tmp);
       
     } else if(surLowerBoth){
       //leaves both leading sur-names lowercase
       //   
       tmp = first+" "+second;
       new_name_arr = clean_name_arr.splice(clean_name_arr.indexOf(first),2,tmp);
-      //testing
-      console.log("5: "+tmp);
       
     } else {
       //Default Capitalization
       tmp = oneWordUpper(a);
-      //testing
-      console.log("6: "+tmp);
       
     }
     
