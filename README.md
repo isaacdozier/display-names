@@ -1,7 +1,8 @@
 # display-names
-functions that converts peoples names to a human readable format. <br /><br />
+Converts names to a human readable format. <br /><br />
 
-"John Smith"       ->   "John Smith" <br />
+Examples:<br />
+"JohN SmiTh"       ->   "John Smith" <br />
 "bob barker"       ->   "Bob Barker" <br />
 "tod O'henry"      ->   "Tod O'Henry" <br />
 "bILLY jAmEs"      ->   "Billy James" <br />
