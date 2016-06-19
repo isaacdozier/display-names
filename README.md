@@ -1,7 +1,11 @@
 # display-names
-Converts names to a human readable format. <br /><br />
 
-Examples:<br />
+Converts names to a human readable format
+
+_note: only a rough example of pattern recognition_
+
+####Examples:
+
 "JohN SmiTh"       ->   "John Smith" <br />
 "bob barker"       ->   "Bob Barker" <br />
 "tod O'henry"      ->   "Tod O'Henry" <br />
