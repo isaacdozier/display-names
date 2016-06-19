@@ -3,20 +3,6 @@
 //    Author: Isaac Dozier
 //    Email: idoz.wow@gmail.com
 //
-//    This program is free software: you can redistribute it and/or modify
-//    it under the terms of the GNU General Public License as published by
-//    the Free Software Foundation, either version 3 of the License, or
-//    (at your option) any later version.
-//
-//    This program is distributed in the hope that it will be useful,
-//    but WITHOUT ANY WARRANTY; without even the implied warranty of
-//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//    GNU General Public License for more details.
-//
-//    You should have received a copy of the GNU General Public License
-//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-//
-//
 
 
 //Main Call functions
@@ -60,22 +46,6 @@ function capFullName(full_name, lang){
     if(!tmp){
       //default language set to 0 for eng/english
       tmp = 0;
-    }
-    return tmp;
-  };
-  
-  //match and join surname compund rules 
-  //ie. 'de La'
-  var compoundIt = function(){
-    var tmp;
-    var clean_tmp = clean_name_arr;
-    for(var i = 0;i<clean_tmp.length;i++){
-      var first = clean_tmp[i];
-      var second = clean_tmp[i+1];
-      
-      if(arrayIsValue(surNames[langIndex()].lowerBefore,first+" "+second)){
-        tmp = first+" "+oneWordUpper(second);
-      }
     }
     return tmp;
   };
